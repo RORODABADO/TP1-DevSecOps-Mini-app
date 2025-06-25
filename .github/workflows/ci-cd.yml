@@ -39,8 +39,26 @@ jobs:
         uses: aquasecurity/trivy-action@0.14.0
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME }}/tp-frontend:latest
+          severity: 'HIGH,CRITICAL'
 
       - name: Run Trivy vulnerability scanner on DB
         uses: aquasecurity/trivy-action@0.14.0
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME }}/tp-db:latest
+          severity: 'HIGH,CRITICAL'
+
+      - name: Snyk Scan Frontend
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: '${{ secrets.DOCKER_USERNAME }}/tp-frontend:latest'
+        continue-on-error: true
+
+      - name: Snyk Scan DB
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: '${{ secrets.DOCKER_USERNAME }}/tp-db:latest'
+        continue-on-error: true
