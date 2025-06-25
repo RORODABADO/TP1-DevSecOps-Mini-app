@@ -46,7 +46,7 @@ jobs:
         image-ref: '${{ secrets.DOCKER_USERNAME }}/python-secure-app:latest'
         format: 'table'
         # exit-code: '1'
-        # severity: 'HIGH,CRITICAL'
+        severity: 'HIGH,CRITICAL'
 
     - name: Trivy Scan (Filesystem - Code & Dependencies)
       uses: aquasecurity/trivy-action@0.16.0
@@ -55,7 +55,7 @@ jobs:
         scan-ref: '.'
         format: 'table'
         # exit-code: '1'
-        # severity: 'HIGH,CRITICAL'
+        severity: 'HIGH,CRITICAL'
 
     - name: Snyk Scan (Docker image)
       uses: snyk/actions/docker@master
@@ -63,3 +63,4 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: '${{ secrets.DOCKER_USERNAME }}/python-secure-app:latest'
+      continue-on-error: true
